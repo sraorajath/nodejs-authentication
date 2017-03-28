@@ -1,8 +1,9 @@
 <div class="container">
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
-      <div class="alert alert-danger" ng-if="msg">
-        <strong ng-bind="msg"></strong>
+      <div class="alert-error">
+        <div class="alert alert-danger" ng-if="empty">
+        <strong ng-bind="empty"></strong>
       </div>
       <div class="loginForm">
         <h2>Login Form</h2>
@@ -17,6 +18,9 @@
             <button class="btn btn-success" id="login-btn" ng-click="login()">Login</button>
           </div>
         </form>
+        <div class="new-user">
+          <span class="new-user-text">New User? <a ng-click="goToSignup()" class="btn btn-info">Signup</a></span>
+        </div>
       </div>
     </div>
   </div><!-- row end -->

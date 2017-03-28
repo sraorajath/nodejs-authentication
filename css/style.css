@@ -4,7 +4,12 @@
 html, body {
   font-family: 'Roboto', sans-serif;
 }
+.alert-error {
+  max-height: 40px;
+  min-height: 40px;
+  height: 40px;
+}
 
-.loginForm {
+.loginForm, .signupForm {
   margin-top: 200px;
 }

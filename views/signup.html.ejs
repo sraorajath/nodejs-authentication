@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <div class="alert-error">
+        <div class="alert alert-danger" ng-if="msg">
+        <strong ng-bind="msg"></strong>
+      </div>
+      </div>
+      <div class="signupForm">
+        <h2>Signup Form</h2>
+        <form>
+          <div class="form-group">
+            <input type="text" name="fullname" ng-model="fullname" class="form-control" placeholder="Fullname" />
+          </div>
+          <div class="form-group">
+            <input type="email" name="email" ng-model="email" class="form-control" placeholder="Email" />
+          </div>
+          <div class="form-group">
+            <input type="text" name="username" ng-model="username" class="form-control" placeholder="Username" />
+          </div>
+          <div class="form-group">
+            <input type="password" name="password" ng-model="password" class="form-control" placeholder="Paassword" />
+          </div>
+          <div class="form-group">
+            <input type="password" name="cpassword" ng-model="cpassword" class="form-control" placeholder="Confirm Paassword" />
+          </div>
+          <div class="form-group">
+            <button class="btn btn-success" id="signup-btn" ng-click="signup()">Signup</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div><!-- row end -->
+</div><!-- container end -->

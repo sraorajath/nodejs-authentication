@@ -6,7 +6,7 @@ const app = express.Router()
 
 // Check Session Exists or not
 const CheckAuth = (req, res, next) => {
-  if(!req.session.passport.user) {
+  if(!req.user) {
     next(res.send({
       status: 403,
       message: 'Unauthorized'
@@ -18,7 +18,7 @@ const CheckAuth = (req, res, next) => {
 
 // Signin API
 app.post('/signin', (req, res, next) => {
-  if(!req.session.passport.user) {
+  if(!req.user) {
     passport.authenticate('local', (err, user, info) => {
       if(err) {
         return next(err)
@@ -42,6 +42,7 @@ app.post('/signin', (req, res, next) => {
       })
     })(req, res, next)
   } else {
+    console.log(req.user)
     res.send({
       status: 403,
       message: 'Already Loggedin'

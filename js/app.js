@@ -1,10 +1,15 @@
 angular.module('myApp', ['ui.router', 'classy'])
   .config(function($stateProvider, $urlRouterProvider) {
     $stateProvider
-      .state('login', {
+      .state('signin', {
         url: '/signin',
         templateUrl: '/views/login.html.ejs',
         controller: 'loginController'
+      })
+      .state('signup', {
+        url: '/signup',
+        templateUrl: '/views/signup.html.ejs',
+        controller: 'signupController'
       })
       .state('user', {
         url: '/user',
@@ -16,34 +21,46 @@ angular.module('myApp', ['ui.router', 'classy'])
 
   .classy.controllers([{
     name: 'loginController',
-    inject: ['$scope', '$location'],
+    inject: ['$scope', '$location', '$http'],
     init: function() {
-      this.$scope.msg = ''
+      this.$scope.empty = ''
+      this.$scope.err = ''
+      if(JSON.parse(sessionStorage.getItem('user'))) {
+        this.$location.path('/user')
+      }
     },
     methods: {
       login: function() {
+        console.log(this._validate(this.$scope.username, this.$scope.password))
         if(this._validate(this.$scope.username, this.$scope.password) == true) {
-          var cb = generate_callback($(this));
-          event.preventDefault();
-          mixpanel.track("Clicked Login", { "Domain": "test.com" }, cb);
-          setTimeout(cb, 500);
-          this.$location.path('/user')
-
-          function generate_callback(a) {
-            return function() {
-              window.location = a.attr("href");
-            }
+          const userDetails = {
+            username: this.$scope.username,
+            password: this.$scope.password
           }
+          this.$http.post('http://52.36.8.85:8080/v1/api/signin', userDetails)
+            .then((res) => {
+              if(res.data.message == 'success') {
+                this.$location.path('/user')
+              } else {
+                this.$scope.err = 'Login Failed'
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            })
         } else {
-          this.$scope.msg = "Login Failed"
+          this.$scope.empty = 'Username and Password Required'
         }
       },
       _validate: function(username, password) {
-        if(username === 'hello' && password === '111') {
+        if(username !== undefined && password !== undefined) {
           return true
         } else {
           return false
         }
+      },
+      goToSignup: function() {
+        this.$location.path('/signup')
       }
     }
   }, {
@@ -53,8 +70,49 @@ angular.module('myApp', ['ui.router', 'classy'])
       this.$scope.msg = "Welcome User"
     },
     methods: {
-      initValue: () => {
+      initValue: function() {
         console.log("Hello")
+      }
+    }
+  }, {
+    name: 'signupController',
+    inject: ['$scope', '$http', '$location'],
+    init: function() {
+
+    },
+    methods: {
+      signup: function() {
+        const data = {
+          fullname: this.$scope.fullname,
+          email: this.$scope.email,
+          username: this.$scope.username,
+          password: this.$scope.password
+        }
+        if(this._validate(data) == true && this._validatePassword(data) == true) {
+          this.$http.post('http://52.36.8.85:8080/v1/api/signup', data)
+            .then((res) => {
+              console.log(res.data)
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        } else {
+          console.log("Error")
+        }
+      },
+      _validate: function(data) {
+        if(data.fullname !== undefined && data.email !== undefined && data.username !== undefined && data.password !== undefined) {
+          return true
+        } else {
+          return false
+        }
+      },
+      _validatePassword: function(data) {
+        if(data.password === this.$scope.cpassword) {
+          return true
+        } else {
+          return false
+        }
       }
     }
   }
