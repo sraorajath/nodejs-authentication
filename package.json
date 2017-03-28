@@ -1,0 +1,17 @@
+{
+  "name": "try",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependecies": {},
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.1",
+    "mongoose": "^4.9.2",
+    "passport": "^0.3.2",
+    "passport-local-mongoose": "^4.0.0",
+    "uuid": "^3.0.1"
+  }
+}
