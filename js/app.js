@@ -12,7 +12,7 @@ angular.module('myApp', ['ui.router', 'classy'])
         controller: 'signupController'
       })
       .state('user', {
-        url: '/user',
+        url: '/user/:userId',
         templateUrl: '/views/user.html.ejs',
         controller: 'userController'
       })
@@ -38,14 +38,15 @@ angular.module('myApp', ['ui.router', 'classy'])
             password: this.$scope.password
           }
           this.$http.post('http://52.36.8.85:8080/v1/api/signin', userDetails)
-            .then((res) => {
+            .then(function(res) {
               if(res.data.message == 'success') {
-                this.$location.path('/user')
+                JSON.stringify(sessionStorage.setItem('user', res.data.data))
+                this.$location.path('/user/' + res.data.data._id)
               } else {
                 this.$scope.err = 'Login Failed'
               }
             })
-            .catch((err) => {
+            .catch(function(err) {
               console.log(err)
             })
         } else {
@@ -64,17 +65,6 @@ angular.module('myApp', ['ui.router', 'classy'])
       }
     }
   }, {
-    name: 'userController',
-    inject: ['$scope'],
-    init: function() {
-      this.$scope.msg = "Welcome User"
-    },
-    methods: {
-      initValue: function() {
-        console.log("Hello")
-      }
-    }
-  }, {
     name: 'signupController',
     inject: ['$scope', '$http', '$location'],
     init: function() {
@@ -90,10 +80,13 @@ angular.module('myApp', ['ui.router', 'classy'])
         }
         if(this._validate(data) == true && this._validatePassword(data) == true) {
           this.$http.post('http://52.36.8.85:8080/v1/api/signup', data)
-            .then((res) => {
-              console.log(res.data)
+            .then(function(res) {
+              if(res.data.message == 'success') {
+                JSON.stringify(sessionStorage.setItem('user', res.data.data))
+                this.$location.path('/user/' + res.data.data.username)
+              }
             })
-            .catch((err) => {
+            .catch(function(err) {
               console.log(err)
             })
         } else {
@@ -113,6 +106,37 @@ angular.module('myApp', ['ui.router', 'classy'])
         } else {
           return false
         }
+      }
+    }
+  }, {
+    name: 'userController',
+    inject: ['$scope', '$http', '$stateParams'],
+    init: function() {
+      this.$scope.msg = ' '
+      this.$scope.userId = $stateParams.userId
+    },
+    methods: {
+      getUserData: function() {
+        this.$http.get('http://52.36.8.85:8080/v1/api/getUserById/' + this.$scope.userId)
+          .then(function(res) {
+            if(res.data.message == 'success' && res.data.data._id == this.$scope.userId) {
+              this.$scope.msg = 'Welcome ' + res.data.data.fullname
+            }
+          })
+          .catch(function(err) {
+            console.log(err)
+          })
+      },
+      logout: function () {
+        this.$http.get('http://52.36.8.85:8080/v1/api/signout')
+          .then(function(res) {
+            if(res.data.message == 'Logout Success') {
+              this.$location.path('/')
+            }
+          })
+          .catch(function(err) {
+            console.log(err)
+          })
       }
     }
   }
