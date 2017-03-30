@@ -6,7 +6,7 @@ a little nicer.
 
 Database used in this application is MongoDB which is a noSQL Datbase.
 
-<a href="http://52.36.8.85:8080">Demo</a>
+<a href="http://52.36.8.85:8080" target="_blank">Demo</a>
 
-If you feel that code is not proper at any point in code drop me a mail <a href="mailto:sraorajath@gmail.com">Here</a>.
+If you feel that code is not proper at any point in code drop me a mail <a target="_blank" href="mailto:sraorajath@gmail.com">Here</a>.
 And also contribute to the same.
