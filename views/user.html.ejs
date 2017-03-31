@@ -1,9 +1,9 @@
-<div class="container">
+<div class="container" ng-init="getUserData()">
   <div class="row">
     <div class="col-md-12">
-      <div class="alert alert-info" ng-if="msg">
+      <div class="alert alert-info">
         <strong ng-bind="msg"></strong>
-        <a class="text-right" ng-click="logout()">Logout</a>
+        <a class="text-right" href="" ng-click="logout()">Logout</a>
       </div>
     </div>
   </div>
