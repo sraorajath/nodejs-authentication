@@ -103,7 +103,7 @@ angular.module('myApp', ['ui.router', 'classy'])
     }
   }, {
     name: 'userController',
-    inject: ['$scope', '$http', '$stateParams'],
+    inject: ['$scope', '$http', '$stateParams', '$location'],
     init: function() {
       this.$scope.msg = ' '
       this.$scope.userId = this.$stateParams.userId
@@ -122,12 +122,12 @@ angular.module('myApp', ['ui.router', 'classy'])
       },
       logout: function () {
         this.$http.get('http://52.36.8.85:8080/v1/api/signout')
-          .then(function(res) {
+          .then((res) => {
             if(res.data.message == 'Logout success') {
               this.$location.path('/signin')
             }
           })
-          .catch(function(err) {
+          .catch((err) => {
             console.log(err)
           })
       }
